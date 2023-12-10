@@ -9,8 +9,18 @@ steps:
   args: ['install']
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--version', '$COMMIT_SHA', '--no-promote']
+  args:
+    - 'app'
+    - 'deploy'
+    - '--version'
+    - '$(date +%s)-canary'
+    - '--no-promote'
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'services', 'set-traffic', 'default', '--splits', "$COMMIT_SHA=10,existing-version=90"]
-
+  args:
+    - 'app'
+    - 'services'
+    - 'set-traffic'
+    - 'default'
+    - '--splits'
+    - '$(date +%s)-canary=10,new-version=90'
