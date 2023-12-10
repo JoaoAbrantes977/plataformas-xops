@@ -18,3 +18,5 @@ describe('App', () => {
       });
   });
 });
+//npm test -- --file server.test.js
+
