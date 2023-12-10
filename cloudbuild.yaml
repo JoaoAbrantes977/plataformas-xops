@@ -5,7 +5,11 @@
 
 steps:
 - name: 'gcr.io/cloud-builders/npm'
+  args: ['config', 'set', 'prefix', '$(npm root -g)']
+  
+- name: 'gcr.io/cloud-builders/npm'
   args: ['install']
+
 
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'test']
