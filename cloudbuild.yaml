@@ -8,19 +8,20 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-    - 'app'
-    - 'deploy'
-    - '--version'
-    - "canary-$(date '+%Y%m%d%H%M%S')"
-    - '--no-promote'
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test']
 
 - name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
   args:
-    - 'app'
-    - 'services'
-    - 'set-traffic'
-    - 'default'
-    - '--splits'
-    - "canary-$(date '+%Y%m%d%H%M%S')=10,new-version=90"
+    - '-c'
+    - |
+      export CANARY_VERSION="canary-$(date '+%Y%m%d%H%M%S')"
+      gcloud app deploy --version=$CANARY_VERSION --no-promote
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gcloud app services set-traffic default --splits "$CANARY_VERSION=10,new-version=90"
