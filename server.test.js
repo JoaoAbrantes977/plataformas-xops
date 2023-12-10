@@ -13,7 +13,7 @@ describe('App', () => {
       .get('/')
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.text).to.equal('Hello from App Engine!');
+        expect(res.text).to.equal('Hello from App Engine! v2');
         done();
       });
   });
