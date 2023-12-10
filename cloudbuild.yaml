@@ -4,12 +4,16 @@
 #timeout: '1600s'
 
 steps:
+steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
+
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test']
 
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', '--version', '$COMMIT_SHA', '--no-promote']
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'services', 'set-traffic', 'default', '--splits', 'new-version=10', 'existing-version=90']
+  args: ['app', 'services', 'set-traffic', 'default', '--splits', "$COMMIT_SHA=10,existing-version=90"]
 
