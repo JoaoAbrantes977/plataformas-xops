@@ -2,11 +2,11 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
 
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['run', 'test']
+- name: 'gcr.io/cloud-builders/chmod'
+  args: ['+x', 'node_modules/.bin/mocha']
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy']
+- name: 'gcr.io/cloud-builders/mocha'
+  args: ['--file', 'server.test.js']
 
 
 
