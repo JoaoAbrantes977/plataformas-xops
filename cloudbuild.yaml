@@ -1,12 +1,12 @@
 steps:
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-
-- name: 'gcr.io/cloud-builders/chmod'
-  args: ['+x', 'node_modules/.bin/mocha']
-
-- name: 'gcr.io/cloud-builders/mocha'
-  args: ['--file', 'server.test.js']
+- name: 'node:18'  # Use uma imagem do Node.js
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    npm install
+    chmod +x node_modules/.bin/mocha
+    npm test
 
 
 
