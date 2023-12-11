@@ -1,5 +1,5 @@
 steps:
-- name: 'node:18'  # Use uma imagem do Node.js
+- name: 'node:14'  # Use uma imagem do Node.js
   entrypoint: 'bash'
   args:
   - '-c'
@@ -8,5 +8,8 @@ steps:
     chmod +x node_modules/.bin/mocha
     npm test
 
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', '--version', '$COMMIT_SHA', '--no-promote']
 
-
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'services', 'set-traffic', 'default', '--splits', 'new-version=10', 'existing-version=90']
