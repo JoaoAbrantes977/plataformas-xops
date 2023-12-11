@@ -1,5 +1,5 @@
 steps:
-- name: 'node:14'  # Use uma imagem do Node.js
+- name: 'node:18'
   entrypoint: 'bash'
   args:
   - '-c'
@@ -7,9 +7,10 @@ steps:
     npm install
     chmod +x node_modules/.bin/mocha
     npm test
-
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--version', '$COMMIT_SHA', '--no-promote']
-
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'services', 'set-traffic', 'default', '--splits', 'new-version=10', 'existing-version=90']
+    if [ $? -eq 0 ]; then
+      echo "Testes bem-sucedidos, iniciando deploy..."
+      gcloud app deploy 
+    else
+      echo "Testes falharam, deploy cancelado."
+      exit 1
+    fi
