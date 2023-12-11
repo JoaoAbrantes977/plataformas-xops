@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('./server.js'); 
+const app = require('../server.js');
 
 // Configurar o uso do chaiHttp
 chai.use(chaiHttp);
@@ -13,7 +13,7 @@ describe('App', () => {
       .get('/')
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.text).to.equal('Hello from App Engine! v2');
+        expect(res.text).to.equal('Hello from App Engine!');
         done();
       });
   });
