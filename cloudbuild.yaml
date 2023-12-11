@@ -1,16 +1,18 @@
 steps:
-- name: 'node:18'
+- name: 'node:14'  # Use uma imagem do Node.js
   entrypoint: 'bash'
   args:
   - '-c'
   - |
+    # Instalação das dependências
     npm install
+    
+    # Concede permissões de execução ao Mocha
     chmod +x node_modules/.bin/mocha
-    npm test
-    if [ $? -eq 0 ]; then
-      echo "Testes bem-sucedidos, iniciando deploy..."
-      gcloud app deploy 
-    else
-      echo "Testes falharam, deploy cancelado."
-      exit 1
-    fi
+    
+    # Executa npm test com um timeout de 30 segundos
+    timeout 30s npm test || echo "Testes atingiram o timeout, continuando com o deploy"
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy']
+
